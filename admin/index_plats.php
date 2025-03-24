@@ -4,7 +4,7 @@ include "../includes/init.php";
 
 if (!empty($_GET["supprimer"])) {
     $sql = "
-        DELETE FROM plats_principaux_vege
+        DELETE FROM plats
         WHERE id = :id
     ";
 
@@ -18,13 +18,9 @@ if (!empty($_GET["supprimer"])) {
 
 
 $sql = "
-    SELECT 
-        id, 
-        nom, 
-        ingrediants,
-        prix
-    FROM plats_principaux_vege
-    ORDER BY nom
+    SELECT *
+    FROM plats
+    ORDER BY id_sortes
 ";
 
 $stmt = $bdd->prepare($sql);

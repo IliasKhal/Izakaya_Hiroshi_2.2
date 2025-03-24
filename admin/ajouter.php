@@ -6,12 +6,13 @@ if (!empty($_POST)) {
     $nom = $_POST["nom"];
     $ingrediants = $_POST["ingrediants"];
     $prix = $_POST["prix"];
+    $id_sortes = $_POST["id_sortes"];
 
     $sql = "
-        INSERT INTO plats_principaux_vege
-            (nom, ingrediants, prix)
+        INSERT INTO plats
+            (nom, ingrediants, prix, :id_sortes)
         VALUES
-            (:nom, :ingrediants, :prix)
+            (:nom, :ingrediants, :prix , :id_sortes)
     ";
 
     $stmt = $bdd->prepare($sql);
@@ -19,11 +20,13 @@ if (!empty($_POST)) {
         ":nom" => $nom,
         ":ingrediants" => $ingrediants,
         ":prix" => $prix,
+        ":id_sortes" => $id_sortes
     ]);
 
-    header("location: index.php");
+    header("location: index_plats.php");
 
 }
+   $sortes = selectAll("sortes","id, nom");
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -35,7 +38,7 @@ if (!empty($_POST)) {
 </head>
 <body>
     <p>
-        <a href="index.php">Retour</a>
+        <a href="index_plats.php">Retour</a>
     </p>
 
     <h1>Ajouter</h1>
@@ -49,6 +52,13 @@ if (!empty($_POST)) {
 
         <p>Prix:</p>
         <input type="text" name="prix">
+        <div>
+            <select name="id_sortes" >
+                <?php foreach ($sortes as $sorte):?>
+                    <option value="<?= $sorte["id"]?>"><?=$sorte["nom"]?></option>
+                <?php endforeach ?>
+            </select>
+        </div>
 
         <p>
             <input type="submit" value="Ajouter">

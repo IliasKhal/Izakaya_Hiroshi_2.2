@@ -9,7 +9,7 @@ if (empty($_POST)) {
     
     $sql = "
         SELECT *
-        FROM plats_principaux_vege
+        FROM plats
         WHERE id = :id
     ";
     
@@ -18,7 +18,7 @@ if (empty($_POST)) {
         ":id" => $id,
     ]);
     $plat = $stmt->fetch();
-
+    $sortes = selectAll("sortes","id, nom");
 
 }else{
     // //traitement du form
@@ -26,14 +26,16 @@ if (empty($_POST)) {
     $nom = $_POST["nom"];
     $ingrediants = $_POST["ingrediants"];
     $prix = $_POST["prix"];
+    $id_sortes = $_POST["id_sortes"];
     
 
     $sql = "
-        UPDATE plats_principaux_vege
+        UPDATE plats
         SET
             nom = :nom,
             ingrediants = :ingrediants,
             prix = :prix
+            id_sortes= :id_sortes
         WHERE id = :id
     ";  
     $stmt = $bdd->prepare($sql);
@@ -42,9 +44,10 @@ if (empty($_POST)) {
         ":nom" => $nom,
         ":ingrediants" => $ingrediants,
         ":prix" => $prix,
+        ":id_sortes" => $id_sortes,
     ]);
     
-    header("location: index.php");
+    header("location: index_plats.php");
 
 }
 ?>
@@ -74,7 +77,13 @@ if (empty($_POST)) {
 
         <p>Prix:</p>
         <input type="text" name="prix"  value="<?= $plat["prix"] ?>">
-
+        <div>
+            <select name="id_sortes" >
+                <?php foreach ($sortes as $sorte):?>
+                    <option value="<?= $sorte["id"]?>"><?=$sorte["nom"]?></option>
+                <?php endforeach ?>
+            </select>
+        </div>
         <p>
             <input type="submit" value="Modifier">
         </p>
